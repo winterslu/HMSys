@@ -1,5 +1,7 @@
 
 ; Load C0-H0-S2 ~ C0-H0-S18 from drive to memory 0x8200~0xa3ff
+
+CYLS	EQU		10
 		ORG		0x7c00
 
 		JMP		entry
@@ -62,6 +64,14 @@ next:
 		ADD		CL,1
 		CMP		CL,18
 		JBE		readloop
+		MOV		CL,1
+		ADD		DH,1
+		CMP		DH,2
+		JB		readloop
+		MOV		DH,0
+		ADD		CH,1
+		CMP		CH,CYLS
+		JB		readloop
 
 fin:
 		HLT				
