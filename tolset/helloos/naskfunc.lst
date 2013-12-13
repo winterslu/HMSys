@@ -4,16 +4,73 @@
      4 00000000                                 [BITS 32]
      5 00000000                                 
      6 00000000                                 [FILE "naskfunc.nas"]
-     7 00000000                                 		GLOBAL	_io_hlt,_write_mem8
-     8 00000000                                 
-     9                                          [SECTION .text]
-    10 00000000                                 
-    11 00000000                                 _io_hlt:	; void io_hlt(void);
-    12 00000000 F4                              		HLT
-    13 00000001 C3                              		RET
-    14 00000002                                 		
-    15 00000002                                 _write_mem8:	; void write_mem8(int addr, int data);
-    16 00000002 8B 4C 24 04                     		MOV		ECX,[ESP+4]
-    17 00000006 8A 44 24 08                     		MOV		AL,[ESP+8]
-    18 0000000A 88 01                           		MOV		[ECX],AL
-    19 0000000C C3                              		RET
+     7 00000000                                 		GLOBAL	_io_hlt, _io_cli, _io_sti, _io_stihlt
+     8 00000000                                 		GLOBAL	_io_in8,  _io_in16,  _io_in32
+     9 00000000                                 		GLOBAL	_io_out8, _io_out16, _io_out32
+    10 00000000                                 		GLOBAL	_io_load_eflags, _io_store_eflags
+    11 00000000                                 
+    12                                          [SECTION .text]
+    13 00000000                                 
+    14 00000000                                 _io_hlt:	; void io_hlt(void);
+    15 00000000 F4                              		HLT
+    16 00000001 C3                              		RET
+    17 00000002                                 
+    18 00000002                                 _io_cli:	; void io_cli(void);
+    19 00000002 FA                              		CLI
+    20 00000003 C3                              		RET
+    21 00000004                                 
+    22 00000004                                 _io_sti:	; void io_sti(void);
+    23 00000004 FB                              		STI
+    24 00000005 C3                              		RET
+    25 00000006                                 
+    26 00000006                                 _io_stihlt:	; void io_stihlt(void);
+    27 00000006 FB                              		STI
+    28 00000007 F4                              		HLT
+    29 00000008 C3                              		RET
+    30 00000009                                 
+    31 00000009                                 _io_in8:	; int io_in8(int port);
+    32 00000009 8B 54 24 04                     		MOV		EDX,[ESP+4]		; port
+    33 0000000D B8 00000000                     		MOV		EAX,0
+    34 00000012 EC                              		IN		AL,DX
+    35 00000013 C3                              		RET
+    36 00000014                                 
+    37 00000014                                 _io_in16:	; int io_in16(int port);
+    38 00000014 8B 54 24 04                     		MOV		EDX,[ESP+4]		; port
+    39 00000018 B8 00000000                     		MOV		EAX,0
+    40 0000001D 66 ED                           		IN		AX,DX
+    41 0000001F C3                              		RET
+    42 00000020                                 
+    43 00000020                                 _io_in32:	; int io_in32(int port);
+    44 00000020 8B 54 24 04                     		MOV		EDX,[ESP+4]		; port
+    45 00000024 ED                              		IN		EAX,DX
+    46 00000025 C3                              		RET
+    47 00000026                                 
+    48 00000026                                 _io_out8:	; void io_out8(int port, int data);
+    49 00000026 8B 54 24 04                     		MOV		EDX,[ESP+4]		; port
+    50 0000002A 8A 44 24 08                     		MOV		AL,[ESP+8]		; data
+    51 0000002E EE                              		OUT		DX,AL
+    52 0000002F C3                              		RET
+    53 00000030                                 
+    54 00000030                                 _io_out16:	; void io_out16(int port, int data);
+    55 00000030 8B 54 24 04                     		MOV		EDX,[ESP+4]		; port
+    56 00000034 8B 44 24 08                     		MOV		EAX,[ESP+8]		; data
+    57 00000038 66 EF                           		OUT		DX,AX
+    58 0000003A C3                              		RET
+    59 0000003B                                 
+    60 0000003B                                 _io_out32:
+    61 0000003B 8B 54 24 04                     		MOV		EDX,[ESP+4]		; port
+    62 0000003F 8B 44 24 08                     		MOV		EAX,[ESP+8]		; data
+    63 00000043 EF                              		OUT		DX,EAX
+    64 00000044 C3                              		RET
+    65 00000045                                 
+    66 00000045                                 _io_load_eflags:
+    67 00000045 9C                              		PUSHFD
+    68 00000046 58                              		POP		EAX
+    69 00000047 C3                              		RET
+    70 00000048                                 
+    71 00000048                                 _io_store_eflags:	; void io_store_eflags(int eflags);
+    72 00000048 8B 44 24 04                     		MOV		EAX,[ESP+4]
+    73 0000004C 50                              		PUSH	EAX
+    74 0000004D 9D                              		POPFD
+    75 0000004E C3                              		RET
+    76 0000004F                                 		
