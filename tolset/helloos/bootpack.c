@@ -1,8 +1,15 @@
+void io_hlt(void);
+void write_mem8(int addr, int data);
+
 void HariMain(void)
 {
+	int i;
 
-fin:
-	/* ‚±‚±‚ÉHLT‚ğ“ü‚ê‚½‚¢‚Ì‚¾‚ªACŒ¾Œê‚Å‚ÍHLT‚ªg‚¦‚È‚¢I */
-	goto fin;
+	for(i = 0xa0000; i <= 0xaffff; i++){
+		write_mem8(i, i | 0x0f);
+	}
 
+	for(;;){
+		io_hlt();
+	}
 }

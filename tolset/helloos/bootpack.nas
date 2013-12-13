@@ -3,11 +3,27 @@
 [OPTIMIZE 1]
 [OPTION 1]
 [BITS 32]
+	EXTERN	_write_mem8
+	EXTERN	_io_hlt
 [FILE "bootpack.c"]
 [SECTION .text]
 	GLOBAL	_HariMain
 _HariMain:
 	PUSH	EBP
 	MOV	EBP,ESP
-L2:
-	JMP	L2
+	PUSH	EBX
+	MOV	EBX,655360
+L6:
+	MOV	EAX,EBX
+	XOR	EAX,15
+	PUSH	EAX
+	PUSH	EBX
+	INC	EBX
+	CALL	_write_mem8
+	CMP	EBX,720895
+	POP	EAX
+	POP	EDX
+	JLE	L6
+L7:
+	CALL	_io_hlt
+	JMP	L7
