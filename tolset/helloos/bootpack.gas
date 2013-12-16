@@ -1,4 +1,9 @@
 	.file	"bootpack.c"
+	.data
+LC0:
+	.ascii "ABC 123\0"
+LC1:
+	.ascii "Winters Lu\0"
 	.text
 	.balign 2
 .globl _HariMain
@@ -7,128 +12,320 @@ _HariMain:
 	pushl	%ebp
 	movl	%esp, %ebp
 	call	_init_palette
-	pushl	$199
-	pushl	$319
-	pushl	$0
-	pushl	$0
-	pushl	$14
-	pushl	$320
-	pushl	$655360
-	call	_boxfill8
-	pushl	$172
-	pushl	$319
-	pushl	$172
-	pushl	$0
+	movswl	4086,%eax
+	pushl	%eax
+	movswl	4084,%eax
+	pushl	%eax
+	pushl	4088
+	call	_initialScreen
+	pushl	$LC0
+	pushl	$7
 	pushl	$8
-	pushl	$320
-	pushl	$655360
-	call	_boxfill8
-	addl	$56, %esp
-	pushl	$173
-	pushl	$319
-	pushl	$173
-	pushl	$0
-	pushl	$7
-	pushl	$320
-	pushl	$655360
-	call	_boxfill8
-	pushl	$199
-	pushl	$319
-	pushl	$174
-	pushl	$0
 	pushl	$8
-	pushl	$320
-	pushl	$655360
-	call	_boxfill8
-	addl	$56, %esp
-	pushl	$176
-	pushl	$59
-	pushl	$176
-	pushl	$3
-	pushl	$7
-	pushl	$320
-	pushl	$655360
-	call	_boxfill8
-	pushl	$196
-	pushl	$2
-	pushl	$176
-	pushl	$2
-	pushl	$7
-	pushl	$320
-	pushl	$655360
-	call	_boxfill8
-	addl	$56, %esp
-	pushl	$196
-	pushl	$59
-	pushl	$196
-	pushl	$3
-	pushl	$15
-	pushl	$320
-	pushl	$655360
-	call	_boxfill8
-	pushl	$195
-	pushl	$59
-	pushl	$177
-	pushl	$59
-	pushl	$15
-	pushl	$320
-	pushl	$655360
-	call	_boxfill8
-	addl	$56, %esp
-	pushl	$197
-	pushl	$59
-	pushl	$197
-	pushl	$2
+	movswl	4084,%eax
+	pushl	%eax
+	pushl	4088
+	call	_paintFonts8
+	addl	$36, %esp
+	pushl	$LC1
 	pushl	$0
-	pushl	$320
-	pushl	$655360
-	call	_boxfill8
-	pushl	$197
-	pushl	$60
-	pushl	$176
-	pushl	$60
-	pushl	$0
-	pushl	$320
-	pushl	$655360
-	call	_boxfill8
-	addl	$56, %esp
-	pushl	$176
-	pushl	$316
-	pushl	$176
-	pushl	$273
-	pushl	$15
-	pushl	$320
-	pushl	$655360
-	call	_boxfill8
-	pushl	$196
-	pushl	$273
-	pushl	$177
-	pushl	$273
-	pushl	$15
-	pushl	$320
-	pushl	$655360
-	call	_boxfill8
-	addl	$56, %esp
-	pushl	$197
-	pushl	$316
-	pushl	$197
-	pushl	$273
+	pushl	$31
+	pushl	$31
+	movswl	4084,%eax
+	pushl	%eax
+	pushl	4088
+	call	_paintFonts8
+	pushl	$LC1
 	pushl	$7
-	pushl	$320
-	pushl	$655360
-	call	_boxfill8
-	pushl	$197
-	pushl	$317
-	pushl	$176
-	pushl	$317
-	pushl	$7
-	pushl	$320
-	pushl	$655360
-	call	_boxfill8
-	addl	$56, %esp
+	pushl	$30
+	pushl	$30
+	movswl	4084,%eax
+	pushl	%eax
+	pushl	4088
+	call	_paintFonts8
+	addl	$48, %esp
 L2:
 	call	_io_hlt
 	jmp	L2
+	.balign 2
+.globl _paintFont8
+	.def	_paintFont8;	.scl	2;	.type	32;	.endef
+_paintFont8:
+	pushl	%ebp
+	movl	%esp, %ebp
+	pushl	%edi
+	pushl	%esi
+	xorl	%esi, %esi
+	pushl	%ebx
+	movl	28(%ebp), %edi
+	movb	24(%ebp), %bl
+L18:
+	movl	20(%ebp), %eax
+	movl	16(%ebp), %edx
+	addl	%esi, %eax
+	imull	12(%ebp), %eax
+	addl	8(%ebp), %eax
+	leal	(%edx,%eax), %ecx
+	movb	(%esi,%edi), %dl
+	testb	%dl, %dl
+	jns	L10
+	movb	%bl, (%ecx)
+L10:
+	movb	%dl, %al
+	andl	$64, %eax
+	testb	%al, %al
+	je	L11
+	movb	%bl, 1(%ecx)
+L11:
+	movb	%dl, %al
+	andl	$32, %eax
+	testb	%al, %al
+	je	L12
+	movb	%bl, 2(%ecx)
+L12:
+	movb	%dl, %al
+	andl	$16, %eax
+	testb	%al, %al
+	je	L13
+	movb	%bl, 3(%ecx)
+L13:
+	movb	%dl, %al
+	andl	$8, %eax
+	testb	%al, %al
+	je	L14
+	movb	%bl, 4(%ecx)
+L14:
+	movb	%dl, %al
+	andl	$4, %eax
+	testb	%al, %al
+	je	L15
+	movb	%bl, 5(%ecx)
+L15:
+	movb	%dl, %al
+	andl	$2, %eax
+	testb	%al, %al
+	je	L16
+	movb	%bl, 6(%ecx)
+L16:
+	andl	$1, %edx
+	testb	%dl, %dl
+	je	L8
+	movb	%bl, 7(%ecx)
+L8:
+	incl	%esi
+	cmpl	$15, %esi
+	jle	L18
+	popl	%ebx
+	popl	%esi
+	popl	%edi
+	popl	%ebp
+	ret
+	.balign 2
+.globl _paintFonts8
+	.def	_paintFonts8;	.scl	2;	.type	32;	.endef
+_paintFonts8:
+	pushl	%ebp
+	movl	%esp, %ebp
+	pushl	%edi
+	pushl	%esi
+	pushl	%ebx
+	pushl	%eax
+	movl	28(%ebp), %ebx
+	movb	24(%ebp), %al
+	movb	%al, -13(%ebp)
+	movl	16(%ebp), %esi
+	movl	20(%ebp), %edi
+	cmpb	$0, (%ebx)
+	jne	L26
+L28:
+	leal	-12(%ebp), %esp
+	popl	%ebx
+	popl	%esi
+	popl	%edi
+	popl	%ebp
+	ret
+L26:
+	movzbl	(%ebx), %eax
+	sall	$4, %eax
+	incl	%ebx
+	addl	$_hankaku, %eax
+	pushl	%eax
+	movsbl	-13(%ebp),%eax
+	pushl	%eax
+	pushl	%edi
+	pushl	%esi
+	addl	$8, %esi
+	pushl	12(%ebp)
+	pushl	8(%ebp)
+	call	_paintFont8
+	addl	$24, %esp
+	cmpb	$0, (%ebx)
+	jne	L26
+	jmp	L28
+	.balign 2
+.globl _initialScreen
+	.def	_initialScreen;	.scl	2;	.type	32;	.endef
+_initialScreen:
+	pushl	%ebp
+	movl	%esp, %ebp
+	pushl	%edi
+	pushl	%esi
+	pushl	%ebx
+	subl	$16, %esp
+	movl	16(%ebp), %eax
+	movl	12(%ebp), %esi
+	decl	%eax
+	decl	%esi
+	pushl	%eax
+	movl	%eax, -16(%ebp)
+	pushl	%esi
+	pushl	$0
+	pushl	$0
+	pushl	$14
+	pushl	12(%ebp)
+	pushl	8(%ebp)
+	call	_boxfill8
+	movl	16(%ebp), %eax
+	subl	$28, %eax
+	pushl	%eax
+	pushl	%esi
+	pushl	%eax
+	pushl	$0
+	pushl	$8
+	pushl	12(%ebp)
+	pushl	8(%ebp)
+	call	_boxfill8
+	movl	16(%ebp), %eax
+	addl	$56, %esp
+	subl	$27, %eax
+	pushl	%eax
+	pushl	%esi
+	pushl	%eax
+	pushl	$0
+	pushl	$7
+	pushl	12(%ebp)
+	pushl	8(%ebp)
+	call	_boxfill8
+	movl	16(%ebp), %eax
+	pushl	-16(%ebp)
+	pushl	%esi
+	subl	$26, %eax
+	pushl	%eax
+	pushl	$0
+	pushl	$8
+	pushl	12(%ebp)
+	pushl	8(%ebp)
+	call	_boxfill8
+	movl	16(%ebp), %edi
+	addl	$56, %esp
+	subl	$24, %edi
+	pushl	%edi
+	pushl	$59
+	pushl	%edi
+	pushl	$3
+	pushl	$7
+	pushl	12(%ebp)
+	pushl	8(%ebp)
+	call	_boxfill8
+	movl	16(%ebp), %ebx
+	subl	$4, %ebx
+	pushl	%ebx
+	pushl	$2
+	pushl	%edi
+	pushl	$2
+	pushl	$7
+	pushl	12(%ebp)
+	pushl	8(%ebp)
+	call	_boxfill8
+	addl	$56, %esp
+	pushl	%ebx
+	pushl	$59
+	pushl	%ebx
+	pushl	$3
+	pushl	$15
+	pushl	12(%ebp)
+	pushl	8(%ebp)
+	call	_boxfill8
+	movl	16(%ebp), %eax
+	subl	$5, %eax
+	pushl	%eax
+	movl	16(%ebp), %eax
+	pushl	$59
+	subl	$23, %eax
+	pushl	%eax
+	movl	%eax, -20(%ebp)
+	pushl	$59
+	pushl	$15
+	pushl	12(%ebp)
+	pushl	8(%ebp)
+	call	_boxfill8
+	movl	16(%ebp), %eax
+	addl	$56, %esp
+	subl	$3, %eax
+	movl	%eax, -24(%ebp)
+	pushl	%eax
+	pushl	$59
+	pushl	%eax
+	pushl	$2
+	pushl	$0
+	pushl	12(%ebp)
+	pushl	8(%ebp)
+	call	_boxfill8
+	pushl	-24(%ebp)
+	pushl	$60
+	pushl	%edi
+	pushl	$60
+	pushl	$0
+	pushl	12(%ebp)
+	pushl	8(%ebp)
+	call	_boxfill8
+	movl	12(%ebp), %esi
+	addl	$56, %esp
+	movl	12(%ebp), %eax
+	subl	$4, %eax
+	subl	$47, %esi
+	pushl	%edi
+	movl	%eax, -28(%ebp)
+	pushl	%eax
+	pushl	%edi
+	pushl	%esi
+	pushl	$15
+	pushl	12(%ebp)
+	pushl	8(%ebp)
+	call	_boxfill8
+	pushl	%ebx
+	pushl	%esi
+	pushl	-20(%ebp)
+	pushl	%esi
+	pushl	$15
+	pushl	12(%ebp)
+	pushl	8(%ebp)
+	call	_boxfill8
+	addl	$56, %esp
+	pushl	-24(%ebp)
+	pushl	-28(%ebp)
+	pushl	-24(%ebp)
+	pushl	%esi
+	pushl	$7
+	pushl	12(%ebp)
+	pushl	8(%ebp)
+	call	_boxfill8
+	movl	12(%ebp), %eax
+	pushl	-24(%ebp)
+	subl	$3, %eax
+	pushl	%eax
+	pushl	%edi
+	pushl	%eax
+	pushl	$7
+	pushl	12(%ebp)
+	pushl	8(%ebp)
+	call	_boxfill8
+	leal	-12(%ebp), %esp
+	popl	%ebx
+	popl	%esi
+	popl	%edi
+	popl	%ebp
+	ret
 	.balign 2
 .globl _colorBox
 	.def	_colorBox;	.scl	2;	.type	32;	.endef
@@ -237,7 +434,7 @@ _set_palette:
 	pushl	%edi
 	pushl	%esi
 	pushl	%ebx
-	pushl	%ecx
+	pushl	%ebx
 	movl	8(%ebp), %ebx
 	movl	12(%ebp), %edi
 	movl	16(%ebp), %esi
@@ -248,10 +445,10 @@ _set_palette:
 	pushl	$968
 	call	_io_out8
 	cmpl	%edi, %ebx
-	popl	%eax
 	popl	%edx
-	jle	L12
-L14:
+	popl	%ecx
+	jle	L37
+L39:
 	movl	-16(%ebp), %eax
 	movl	%eax, 8(%ebp)
 	leal	-12(%ebp), %esp
@@ -260,7 +457,7 @@ L14:
 	popl	%edi
 	popl	%ebp
 	jmp	_io_store_eflags
-L12:
+L37:
 	movb	(%esi), %al
 	incl	%ebx
 	shrb	$2, %al
@@ -283,8 +480,8 @@ L12:
 	call	_io_out8
 	addl	$24, %esp
 	cmpl	%edi, %ebx
-	jle	L12
-	jmp	L14
+	jle	L37
+	jmp	L39
 	.balign 2
 .globl _boxfill8
 	.def	_boxfill8;	.scl	2;	.type	32;	.endef
@@ -294,25 +491,25 @@ _boxfill8:
 	pushl	%edi
 	pushl	%esi
 	pushl	%ebx
-	pushl	%edi
-	pushl	%edi
+	pushl	%eax
+	pushl	%eax
 	movb	16(%ebp), %al
 	movl	24(%ebp), %ecx
 	movl	28(%ebp), %edi
 	movb	%al, -13(%ebp)
 	cmpl	32(%ebp), %ecx
-	jg	L27
+	jg	L52
 	movl	12(%ebp), %ebx
 	imull	%ecx, %ebx
-L25:
+L50:
 	movl	20(%ebp), %edx
 	cmpl	%edi, %edx
-	jg	L29
+	jg	L54
 	movl	8(%ebp), %esi
 	addl	%ebx, %esi
 	addl	%edx, %esi
 	movl	%esi, -20(%ebp)
-L24:
+L49:
 	movl	-20(%ebp), %esi
 	movb	-13(%ebp), %al
 	incl	%edx
@@ -320,15 +517,15 @@ L24:
 	incl	%esi
 	movl	%esi, -20(%ebp)
 	cmpl	%edi, %edx
-	jle	L24
-L29:
+	jle	L49
+L54:
 	incl	%ecx
 	addl	12(%ebp), %ebx
 	cmpl	32(%ebp), %ecx
-	jle	L25
-L27:
-	popl	%ebx
+	jle	L50
+L52:
 	popl	%esi
+	popl	%edi
 	popl	%ebx
 	popl	%esi
 	popl	%edi
@@ -339,6 +536,8 @@ L27:
 	.def	_io_cli;	.scl	2;	.type	32;	.endef
 	.def	_io_load_eflags;	.scl	2;	.type	32;	.endef
 	.def	_set_palette;	.scl	2;	.type	32;	.endef
-	.def	_io_hlt;	.scl	2;	.type	32;	.endef
 	.def	_boxfill8;	.scl	2;	.type	32;	.endef
+	.def	_io_hlt;	.scl	2;	.type	32;	.endef
+	.def	_paintFonts8;	.scl	2;	.type	32;	.endef
+	.def	_initialScreen;	.scl	2;	.type	32;	.endef
 	.def	_init_palette;	.scl	2;	.type	32;	.endef

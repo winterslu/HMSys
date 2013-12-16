@@ -5,11 +5,11 @@ DSKCAC0	EQU		0x00008000
 
 ; BIOS_INFO
 CYLS	EQU		0x0ff0
-LEDS	EQU		0X0FF1
-VMODE	EQU		0X0FF2		;Color info
-SCRNX	EQU		0X0FF4		;Screen X
-SCRNY	EQU		0X0FF6		;Screen Y
-VRAM	EQU		0X0FF8		;Video cache initial address
+LEDS	EQU		0x0ff1
+VMODE	EQU		0x0ff2		;Color info
+SCRNX	EQU		0x0ff4		;Screen X
+SCRNY	EQU		0x0ff6		;Screen Y
+VRAM	EQU		0x0ff8		;Video cache initial address
 
 
 		ORG		0xc200		; program load from data at memory address 0x8000+0x4200=0xc200
@@ -19,7 +19,7 @@ VRAM	EQU		0X0FF8		;Video cache initial address
 		INT		0x10
 		MOV		BYTE [VMODE],8
 		MOV		WORD [SCRNX],320
-		MOV		WORD [SCRNX],200
+		MOV		WORD [SCRNY],200
 		MOV		DWORD [VRAM],0x000a0000
 		
 		MOV		AH,0x02

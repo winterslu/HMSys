@@ -5,11 +5,11 @@
      5 00000000                                 
      6 00000000                                 ; BIOS_INFO
      7  = 00000FF0                              CYLS	EQU		0x0ff0
-     8  = 00000FF1                              LEDS	EQU		0X0FF1
-     9  = 00000FF2                              VMODE	EQU		0X0FF2		;Color info
-    10  = 00000FF4                              SCRNX	EQU		0X0FF4		;Screen X
-    11  = 00000FF6                              SCRNY	EQU		0X0FF6		;Screen Y
-    12  = 00000FF8                              VRAM	EQU		0X0FF8		;Video cache initial address
+     8  = 00000FF1                              LEDS	EQU		0x0ff1
+     9  = 00000FF2                              VMODE	EQU		0x0ff2		;Color info
+    10  = 00000FF4                              SCRNX	EQU		0x0ff4		;Screen X
+    11  = 00000FF6                              SCRNY	EQU		0x0ff6		;Screen Y
+    12  = 00000FF8                              VRAM	EQU		0x0ff8		;Video cache initial address
     13 00000000                                 
     14 00000000                                 
     15                                          		ORG		0xc200		; program load from data at memory address 0x8000+0x4200=0xc200
@@ -19,7 +19,7 @@
     19 0000C204 CD 10                           		INT		0x10
     20 0000C206 C6 06 0FF2 08                   		MOV		BYTE [VMODE],8
     21 0000C20B C7 06 0FF4 0140                 		MOV		WORD [SCRNX],320
-    22 0000C211 C7 06 0FF4 00C8                 		MOV		WORD [SCRNX],200
+    22 0000C211 C7 06 0FF6 00C8                 		MOV		WORD [SCRNY],200
     23 0000C217 66 C7 06 0FF8 000A0000          		MOV		DWORD [VRAM],0x000a0000
     24 0000C220                                 		
     25 0000C220 B4 02                           		MOV		AH,0x02
