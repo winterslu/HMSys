@@ -1,37 +1,44 @@
-text size :   1155(0x00483)
-data size :   4168(0x01048)
+text size :   1735(0x006C7)
+data size :   4424(0x01148)
 bss  size :      0(0x00000)
 
 0x00000000 : (.text)
 0x00000024 : (.text)
 0x00000024 : _HariMain
-0x000000AE : _paintFont8
-0x00000134 : _paintFonts8
-0x00000183 : _initialScreen
-0x00000309 : _colorBox
-0x00000363 : _init_palette
-0x00000376 : _set_palette
-0x000003FE : _boxfill8
-0x0000044F : _io_hlt
-0x0000044F : (.text)
-0x00000451 : _io_cli
-0x00000453 : _io_sti
-0x00000455 : _io_stihlt
-0x00000458 : _io_in8
-0x00000463 : _io_in16
-0x0000046F : _io_in32
-0x00000475 : _io_out8
-0x0000047F : _io_out16
-0x0000048A : _io_out32
-0x00000494 : _io_load_eflags
-0x00000497 : _io_store_eflags
-0x0000049E : (.text)
-0x0000049E : _HariStartup
+0x00000110 : _paintFont8
+0x00000196 : _paintFonts8
+0x000001E5 : _initMouseCursor8
+0x00000242 : _putBlock8
+0x00000298 : _initialScreen
+0x0000041E : _colorBox
+0x00000478 : _init_palette
+0x0000048B : _set_palette
+0x00000513 : _boxfill8
+0x00000564 : _init_gdtidt
+0x000005FD : _set_segmdesc
+0x00000647 : _set_gatedesc
+0x00000673 : _io_hlt
+0x00000673 : (.text)
+0x00000675 : _io_cli
+0x00000677 : _io_sti
+0x00000679 : _io_stihlt
+0x0000067C : _io_in8
+0x00000687 : _io_in16
+0x00000693 : _io_in32
+0x00000699 : _io_out8
+0x000006A3 : _io_out16
+0x000006AE : _io_out32
+0x000006B8 : _io_load_eflags
+0x000006BB : _io_store_eflags
+0x000006C2 : _load_gdtr
+0x000006D2 : _load_idtr
+0x000006E2 : (.text)
+0x000006E2 : _HariStartup
 0x00000000 : (.data)
 0x00000000 : (.data)
 0x00310000 : (.data)
-0x00310048 : _hankaku
-0x00310048 : (.data)
+0x00310148 : _hankaku
+0x00310148 : (.data)
 0x00000000 : (.bss)
 0x00000000 : (.bss)
 0x00000000 : (.bss)
